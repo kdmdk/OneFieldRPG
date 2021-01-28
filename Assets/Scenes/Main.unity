@@ -1004,7 +1004,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: -1.5, z: -10}
+  m_LocalPosition: {x: 4.5, y: -1.5, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1060,7 +1060,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.2628191, g: 0.9056604, b: 0.13243146, a: 1}
+  m_Color: {r: 0.7703845, g: 0.8396226, b: 0.75645244, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1138,7 +1138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.6981132, g: 0.08891065, b: 0.08891065, a: 1}
+  m_Color: {r: 0.7735849, g: 0.28097185, b: 0.28097185, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1274,7 +1274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageFiles:
-  - {fileID: 4900000, guid: 82c8ead0b91c143e5a95c08f2af18f53, type: 3}
+  - {fileID: 4900000, guid: aa56ac2e70d0c46eeb5742786106c4e1, type: 3}
   prefabs:
   - {fileID: 3760146513426062836, guid: e74e5c39b8983486e9307e6b6b25ca1b, type: 3}
   - {fileID: 7775605046228653471, guid: 4df4e6d53d5ce41758d420362ef91315, type: 3}
@@ -1633,7 +1633,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 0}
-  m_Type: 1
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -1776,7 +1776,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.2628191, g: 0.9056604, b: 0.13243146, a: 1}
+  m_Color: {r: 0.7703845, g: 0.8396226, b: 0.75645244, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1998,7 +1998,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.2628191, g: 0.9056604, b: 0.13243146, a: 1}
+  m_Color: {r: 0.7703845, g: 0.8396226, b: 0.75645244, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:

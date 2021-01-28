@@ -12,9 +12,15 @@ public class PlayerManager : MonoBehaviour
     public Text countText;
     public Sprite[] sprites;
     public Text karma;
+    public Text lifeText;
+    public Text goldText;
 
+    bool isGameover = false;
+
+    int lifePoint = 100;
+    int goldPoint = 500;
     int count = 0;
-    int max = 50;
+    int max = 3;
 
     [SerializeField] int dragonFlag = 0;
     [SerializeField] int witchFlag = 0;
@@ -43,6 +49,8 @@ public class PlayerManager : MonoBehaviour
     void Start()
     {
         eventManager = GameObject.Find("EventManager").GetComponent<EventManager>();
+        goldText = GameObject.Find("GOLD").GetComponent<Text>();
+        lifeText = GameObject.Find("LIFE").GetComponent<Text>();
         karma = GameObject.Find("KARMA").GetComponent<Text>();
         countText = GameObject.Find("CountDown").GetComponent<Text>();
         daysLeft = GameObject.Find("CountDown").GetComponent<Text>().text;
@@ -55,11 +63,21 @@ public class PlayerManager : MonoBehaviour
         //countText.text = "残り<b><size=60>" + max + "</size></b>日";
         daysLeft = (max - count).ToString();
         countText.text = "残り<b><size=60>" + daysLeft + "</size></b>日";
+        changeLife(0);
+        changeGold(0);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(!isGameover && max - count == 0 || lifePoint <= 0)
+        {
+            charaImage.sprite = sprites[6];
+            isDone = true;
+            messageManager.SetMessagePanel("GAMEOVER!");
+            isGameover = true;
+            onEvent = 0;
+        }
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             //animator.SetInteger("direction", 3);
@@ -507,6 +525,7 @@ public class PlayerManager : MonoBehaviour
             if (eventManager.button == 1)
             {
                 messageManager.SetMessagePanel("商人：\n毎度！");
+                changeGold(-100);
                 merchantFlag = -1;
             }
             else if (eventManager.button == 2)
@@ -545,6 +564,7 @@ public class PlayerManager : MonoBehaviour
             if (eventManager.button == 1)
             {
                 messageManager.SetMessagePanel("商人：\n割引しといたヨ！\nまた来てね！");
+                changeGold(-80);
                 merchantFlag = -1;
             }
             else if (eventManager.button == 2)
@@ -662,6 +682,7 @@ public class PlayerManager : MonoBehaviour
                 messageManager.SetMessagePanel("ゴブリン：\nイイダロウ！\n貢物ヲ寄越セ！\nソウスレバ貴様ラノ金貨ヲ代ワリニヤルゾ！");
                 goblinFlag = -1;
                 karmaPoint -= 1;
+                changeGold(50);
             }
             else if (eventManager.button == 2)
             {
@@ -858,6 +879,7 @@ public class PlayerManager : MonoBehaviour
             if (eventManager.button == 1)
             {
                 messageManager.SetMessagePanel("王：\n良かろう！\n支度金を用意させた！\nこれを持って旅に出るが良い！");
+                changeGold(1000);
                 kingFlag = -1;
             }
             else if (eventManager.button == 2)
@@ -899,6 +921,7 @@ public class PlayerManager : MonoBehaviour
             if (eventManager.button == 1)
             {
                 messageManager.SetMessagePanel("あなたは宝箱を開けた！\n100ゴールド手に入れた！");
+                changeGold(100);
                 charaImage.sprite = sprites[9];
                 tresureFlag = -1;
             }
@@ -906,6 +929,7 @@ public class PlayerManager : MonoBehaviour
             {
                 messageManager.SetMessagePanel("おおっと！石つぶて\nあなたは10ダメージを受けた！");
                 tresureFlag = -1;
+                changeLife(-10);
             }
             else if (eventManager.button == 3)
             {
@@ -918,6 +942,17 @@ public class PlayerManager : MonoBehaviour
             isDone = false;
             tresureFlag = -1;
         }
+    }
+
+    void changeLife(int value)
+    {
+        lifePoint = lifePoint + value;
+        lifeText.text = "LIFE："+ lifePoint.ToString();
+    }
+    void changeGold(int value)
+    {
+        goldPoint = goldPoint + value;
+        goldText.text = "GOLD：" + goldPoint.ToString();
     }
 
     public void EventBranch()
@@ -961,6 +996,10 @@ public class PlayerManager : MonoBehaviour
         else if (onEvent == 10)
         {
             meetDragon();
+        }
+        else
+        {
+            return;
         }
         EventManager.isClick = false;
     }
