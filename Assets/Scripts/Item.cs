@@ -29,6 +29,15 @@ public class Item : ScriptableObject
 	[SerializeField]
 	private int price;
 
+	// 新たに生成する時:originがスクリプタブル:コンストラクタ
+	public Item(Item origin)
+	{
+		this.kindOfItem = origin.kindOfItem;
+		this.itemName = origin.itemName;
+		this.information = origin.information;
+		this.price = origin.price;
+	}
+
 	public KindOfItem GetKindOfItem()
 	{
 		return kindOfItem;

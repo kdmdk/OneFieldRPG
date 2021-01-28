@@ -112,7 +112,14 @@ MonoBehaviour:
   - {fileID: 6276436767908852560, guid: 3f1f5f3b708dd46e5896eff2549506b9, type: 3}
   - {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
   - {fileID: 4475375876111409798, guid: 60aa5123d44a640998911bd787fea554, type: 3}
+  - {fileID: 1515896826550239143, guid: 90c53037bfb9c4329b87553e5321129a, type: 3}
+  - {fileID: 3080312532112863954, guid: 90c53037bfb9c4329b87553e5321129a, type: 3}
+  - {fileID: -855583396454057814, guid: 2328837cd57904b8cbf589afa0dccf01, type: 3}
+  - {fileID: 5015184269093864949, guid: e4bc7247b8dd04485807081602806ea7, type: 3}
+  - {fileID: 5910095444464410053, guid: 61eb32cc154574ea7a700e8e3ef7b43f, type: 3}
   karma: {fileID: 0}
+  tresureFlag: 0
+  goblinFlag: 0
   merchantFlag: 0
   kingFlag: 0
   karmaPoint: 0

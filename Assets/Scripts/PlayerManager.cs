@@ -14,8 +14,15 @@ public class PlayerManager : MonoBehaviour
     public Text karma;
 
     int count = 0;
-    int max = 100;
+    int max = 50;
 
+    [SerializeField] int dragonFlag = 0;
+    [SerializeField] int witchFlag = 0;
+    [SerializeField] int darkLordFlag = 0;
+    [SerializeField] int dwarfFlag = 0;
+    [SerializeField] int elfFlag = 0;
+    [SerializeField] int ogreFlag = 0;
+    [SerializeField] int tresureFlag = 0;
     [SerializeField] int goblinFlag = 0;
     [SerializeField] int merchantFlag = 0;
     [SerializeField] int kingFlag = 0; //　王のイベントを管理
@@ -83,7 +90,17 @@ public class PlayerManager : MonoBehaviour
     public void Move(Vector2 position, DIRECTION direction)
     {
         transform.position = position;
-        
+
+        tresureFlag = 0;
+        goblinFlag = 0;
+        merchantFlag = 0;
+        kingFlag = 0;
+        elfFlag = 0;
+        ogreFlag = 0;
+        dwarfFlag = 0;
+        darkLordFlag = 0;
+        witchFlag = 0;
+        dragonFlag = 0;
         //MessageManager.isTextSound = true;
     }
     void MoveTo(DIRECTION direction)
@@ -109,39 +126,86 @@ public class PlayerManager : MonoBehaviour
         }
         if (stage.IsGround(nextPlayerPositionOnTile))
         {
-            int r = Random.Range(0, 100);
+            int r = Random.Range(0, 110);
             Debug.Log("r:" + r);
-            if (r >= 50)
+            if (r <= 33)
             {
                 isDone = true;
                 charaImage.sprite = sprites[1];
                 messageManager.SetMessagePanel("あなたの目の前に商人が現れた\n対応を選んでください");
                 onEvent = 1;
             }
-            else
+            else if(r > 33 && r <= 66)
             {
                 isDone = true;
                 charaImage.sprite = sprites[7];
                 messageManager.SetMessagePanel("あなたの目の前にゴブリンが現れた\n対応を選んでください");
                 onEvent = 2;
             }
-            
+            else if (r > 66 && r <= 100)
+            {
+                isDone = true;
+                charaImage.sprite = sprites[8];
+                messageManager.SetMessagePanel("あなたの目の前に宝箱が現れた\n対応を選んでください\n1,そのまま開ける\n2,罠の解除を試みる\n3,諦める");
+                onEvent = 3;
+            }
+            else if (r > 100)
+            {
+                isDone = true;
+                charaImage.sprite = sprites[12];
+                messageManager.SetMessagePanel("あなたの目の前にオーガが現れた\n対応を選んでください");
+                onEvent = 4;
+            }
+        }
 
+        if (stage.IsHouse(nextPlayerPositionOnTile))
+        {
+            isDone = true;
+            charaImage.sprite = sprites[10];
+            messageManager.SetMessagePanel("魔女：\nここまで来るとはやるわね\n");
+            onEvent = 9;
+        }
+        if (stage.IsDungeon(nextPlayerPositionOnTile))
+        {
+            isDone = true;
+            charaImage.sprite = sprites[11];
+            messageManager.SetMessagePanel("ドラゴン：\n弱きものよ。この私に何用だ？\n");
+            onEvent = 10;
         }
         if (stage.IsForest(nextPlayerPositionOnTile))
         {
-            charaImage.sprite = sprites[2];
-            messageManager.SetMessagePanel("エルフ：\n人間が森に何か用かしら？\n");
+            int r = Random.Range(0, 100);
+            Debug.Log("r:" + r);
+            if (r <= 50)
+            {
+                isDone = true;
+                charaImage.sprite = sprites[2];
+                messageManager.SetMessagePanel("エルフ：\n人間が森に何か用かしら？\n");
+                onEvent = 6;
+            }
+            else
+            {
+                isDone = true;
+                charaImage.sprite = sprites[12];
+                messageManager.SetMessagePanel("オーガ：\nニンゲン・・・ウマソウ\n");
+                onEvent = 4;
+            }
+
+            
         }
         if (stage.IsCave(nextPlayerPositionOnTile))
         {
+            isDone = true;
             charaImage.sprite = sprites[3];
             messageManager.SetMessagePanel("ドワーフ：\n酒はあるか？\n");
+            onEvent = 7;
         }
         if (stage.IsTower(nextPlayerPositionOnTile))
         {
+            isDone = true;
             charaImage.sprite = sprites[4];
             messageManager.SetMessagePanel("魔王：\nよくぞ参った！\n人間共を滅ぼすのだ！\nさすれば我が配下に取り立てよう！");
+            onEvent = 8;
         }
         if (stage.IsPlayerInitialPosition(nextPlayerPositionOnTile))
         {
@@ -170,18 +234,216 @@ public class PlayerManager : MonoBehaviour
         }
         return currentPosition;
     }
+    void meetDragon()
+    {
+
+        charaImage.sprite = sprites[11];
+        if (dragonFlag == -1)
+        {
+            isDone = false;
+            messageManager.SetMessagePanel("あなたはその場を立ち去った");
+        }
+        else if (dragonFlag == 0)
+        {
+            if (eventManager.button == 1)
+            {
+                messageManager.SetMessagePanel("ドラゴン：\n私に頼み事でもするつもりかね？\nその程度の力で・・・！");
+                dragonFlag = -1;
+            }
+            else if (eventManager.button == 2)
+            {
+                messageManager.SetMessagePanel("ドラゴン：\n人の身でその態度\n・・・中々に向こう見ずだな");
+                dragonFlag = -1;
+            }
+            else if (eventManager.button == 3)
+            {
+                messageManager.SetMessagePanel("ドラゴン：\n今、立ち去るのならば見逃そう・・・");
+                dragonFlag = -1;
+            }
+        }
+        else
+        {
+            isDone = false;
+            dragonFlag = -1;
+        }
+    }
+    void meetWitch()
+    {
+
+        charaImage.sprite = sprites[10];
+        if (witchFlag == -1)
+        {
+            isDone = false;
+            messageManager.SetMessagePanel("あなたはその場を立ち去った");
+        }
+        else if (witchFlag == 0)
+        {
+            if (eventManager.button == 1)
+            {
+                messageManager.SetMessagePanel("魔女：\nいい態度ね\nそれで用件は？");
+                witchFlag = -1;
+            }
+            else if (eventManager.button == 2)
+            {
+                messageManager.SetMessagePanel("魔女：\n生意気な態度ね\nそれでは話にならないわよ");
+                witchFlag = -1;
+            }
+            else if (eventManager.button == 3)
+            {
+                messageManager.SetMessagePanel("魔女：\nおかえりはあちらよ");
+                witchFlag = -1;
+            }
+        }
+        else
+        {
+            isDone = false;
+            witchFlag = -1;
+        }
+    }
+    void meetDarkLord()
+    {
+
+        charaImage.sprite = sprites[4];
+        if (darkLordFlag == -1)
+        {
+            isDone = false;
+            messageManager.SetMessagePanel("あなたはその場を立ち去った");
+        }
+        else if (darkLordFlag == 0)
+        {
+            if (eventManager.button == 1)
+            {
+                messageManager.SetMessagePanel("魔王：\nよく言った！\nそれでこそ地獄の戦士に相応しい！");
+                darkLordFlag = -1;
+            }
+            else if (eventManager.button == 2)
+            {
+                messageManager.SetMessagePanel("魔王：\n私に歯向かう気かね？\n考え直したまえ");
+                darkLordFlag = -1;
+            }
+            else if (eventManager.button == 3)
+            {
+                messageManager.SetMessagePanel("魔王：\nせっかくここまで来て逃げ出すなど\nもったいない事だと思わないかね？");
+                darkLordFlag = -1;
+            }
+        }
+        else
+        {
+            isDone = false;
+            darkLordFlag = -1;
+        }
+    }
+    void meetDwarf()
+    {
+
+        charaImage.sprite = sprites[3];
+        if (dwarfFlag == -1)
+        {
+            isDone = false;
+            messageManager.SetMessagePanel("あなたはその場を立ち去った");
+        }
+        else if (dwarfFlag == 0)
+        {
+            if (eventManager.button == 1)
+            {
+                messageManager.SetMessagePanel("ドワーフ：\nまあゆっくりしていけや");
+                dwarfFlag = -1;
+            }
+            else if (eventManager.button == 2)
+            {
+                messageManager.SetMessagePanel("ドワーフ：\n喧嘩するのか？イイぜ！");
+                dwarfFlag = -1;
+            }
+            else if (eventManager.button == 3)
+            {
+                messageManager.SetMessagePanel("ドワーフ：\nおいおい、もう帰るのか？");
+                dwarfFlag = -1;
+            }
+        }
+        else
+        {
+            isDone = false;
+            dwarfFlag = -1;
+        }
+    }
+    void meetOgre()
+    {
+
+        charaImage.sprite = sprites[12];
+        if (ogreFlag == -1)
+        {
+            isDone = false;
+            messageManager.SetMessagePanel("あなたはその場を立ち去った");
+        }
+        else if (ogreFlag == 0)
+        {
+            if (eventManager.button == 1)
+            {
+                messageManager.SetMessagePanel("オーガ：\n・・・ウガ！？\n・・・ジュルリ！");
+                ogreFlag = -1;
+            }
+            else if (eventManager.button == 2)
+            {
+                messageManager.SetMessagePanel("オーガ：\nオレサマオマエマルカジリ！！！");
+                ogreFlag = -1;
+            }
+            else if (eventManager.button == 3)
+            {
+                messageManager.SetMessagePanel("オーガ：\nオマエウマソウ・・・！");
+                ogreFlag = -1;
+            }
+        }
+        else
+        {
+            isDone = false;
+            ogreFlag = -1;
+        }
+    }
+    void meetElf()
+    {
+
+        charaImage.sprite = sprites[2];
+        if (elfFlag == -1)
+        {
+            isDone = false;
+            messageManager.SetMessagePanel("あなたはその場を立ち去った");
+        }
+        else if (elfFlag == 0)
+        {
+            if (eventManager.button == 1)
+            {
+                messageManager.SetMessagePanel("エルフ：\n人間に迎合する気はないわ");
+                elfFlag = -1;
+            }
+            else if (eventManager.button == 2)
+            {
+                messageManager.SetMessagePanel("エルフ：\nこの森はエルフのものよ！\n人間だろうとオーガだろうと\n好きにはさせないわ！");
+                elfFlag = -1;
+            }
+            else if (eventManager.button == 3)
+            {
+                messageManager.SetMessagePanel("エルフ：\n人間の里に帰りなさい");
+                elfFlag = -1;
+            }
+        }
+        else
+        {
+            isDone = false;
+            elfFlag = -1;
+        }
+    }
 
     void meetMerchant()
     {
         
         charaImage.sprite = sprites[1];
-
+        Debug.Log("現在の商人フラグ：" + merchantFlag);
         if(merchantFlag == -1)
         {
             isDone = false;
             //charaImage.sprite = sprites[6];
             messageManager.SetMessagePanel("あなたはその場を立ち去った");
-            merchantFlag = 0;
+            //merchantFlag = 0;
         }
         else if(merchantFlag == 0)
         {
@@ -192,13 +454,13 @@ public class PlayerManager : MonoBehaviour
             }
             else if (eventManager.button == 2)
             {
-                messageManager.SetMessagePanel("商人：\nまあまあ、そういきりたたずニ。\n何か買っていってヨ！");
+                messageManager.SetMessagePanel("商人：\nまあまあ、そう怖い顔せずニ。\n何か買っていってヨ！");
                 merchantFlag = 2;
                 karmaPoint -= 1;
             }
             else if (eventManager.button == 3)
             {
-                messageManager.SetMessagePanel("商人：\n帰るのかい？\nまたネ！");
+                messageManager.SetMessagePanel("商人：\n帰るのカイ？\nまたネ！");
                 merchantFlag = -1;
             }
         }
@@ -211,14 +473,14 @@ public class PlayerManager : MonoBehaviour
             }
             else if (eventManager.button == 2)
             {
-                messageManager.SetMessagePanel("商人：\n安くしろっテ？\n仕方ないなア");
+                messageManager.SetMessagePanel("商人：\n掘り出し物ないかって？\n仕方ないなア");
                 merchantFlag = 2;
                 karmaPoint -= 1;
             }
             else if (eventManager.button == 3)
             {
-                messageManager.SetMessagePanel("商人：\n買い物はしないのカイ？");
-                merchantFlag = 0;
+                messageManager.SetMessagePanel("商人：\n買い物はしないのカイ？\nならいい話したげるネ");
+                merchantFlag = 6;
             }
         }
         else if (merchantFlag == 2)
@@ -230,13 +492,13 @@ public class PlayerManager : MonoBehaviour
             }
             else if (eventManager.button == 2)
             {
-                messageManager.SetMessagePanel("商人：\nひええ！\nお助け〜！");
+                messageManager.SetMessagePanel("商人：\nアイヤー！\nそんなにいきり立たないでネ！");
                 merchantFlag = 4;
                 karmaPoint -= 3;
             }
             else if (eventManager.button == 3)
             {
-                messageManager.SetMessagePanel("商人：\n？");
+                messageManager.SetMessagePanel("商人：\nどしたノ？\nもう帰るノ？");
                 merchantFlag = 0;
             }
         }
@@ -249,7 +511,7 @@ public class PlayerManager : MonoBehaviour
             }
             else if (eventManager.button == 2)
             {
-                messageManager.SetMessagePanel("商人：\n値切りカイ？参るナ〜");
+                messageManager.SetMessagePanel("商人：\n値切りカイ？参るナ〜\nちょっぴりなら割引できるネ");
                 merchantFlag = 5;
                 karmaPoint -= 1;
             }
@@ -258,6 +520,66 @@ public class PlayerManager : MonoBehaviour
                 messageManager.SetMessagePanel("商人：\nやっぱりいらなイ？\nなら他のものを買うカイ？");
                 merchantFlag = 1;
             }
+        }
+        else if (merchantFlag == 4)
+        {
+            if (eventManager.button == 1)
+            {
+                messageManager.SetMessagePanel("商人：\n許してくれるならとっておきの情報あげるヨ！");
+                merchantFlag = 6;
+            }
+            else if (eventManager.button == 2)
+            {
+                messageManager.SetMessagePanel("商人：\nヒエ〜！\nお助けエ〜！");
+                merchantFlag = 7;
+                karmaPoint -= 1;
+            }
+            else if (eventManager.button == 3)
+            {
+                messageManager.SetMessagePanel("商人：\n許してくれるんだね？\nよかったヨ！");
+                merchantFlag = 0;
+            }
+        }
+        else if (merchantFlag == 5)
+        {
+            if (eventManager.button == 1)
+            {
+                messageManager.SetMessagePanel("商人：\n割引しといたヨ！\nまた来てね！");
+                merchantFlag = -1;
+            }
+            else if (eventManager.button == 2)
+            {
+                messageManager.SetMessagePanel("商人：\n困るヨ〜！");
+                merchantFlag = 2;
+            }
+            else if (eventManager.button == 3)
+            {
+                messageManager.SetMessagePanel("商人：\nなら耳寄りの情報をサービスしとくネ！");
+                merchantFlag = 6;
+            }
+        }
+        else if (merchantFlag == 6)
+        {
+            if (eventManager.button == 1)
+            {
+                messageManager.SetMessagePanel("商人：\n島の真ん中の塔には魔王が住んでるヨ\n何かよからぬことを考えてるらしいネ");
+                merchantFlag = -1;
+            }
+            else if (eventManager.button == 2)
+            {
+                messageManager.SetMessagePanel("商人：\n最近、エルフにきいたんだケド\n森にオーガがよく出るらしいネ\n気をつけるんだヨ");
+                merchantFlag = -1;
+            }
+            else if (eventManager.button == 3)
+            {
+                messageManager.SetMessagePanel("商人：\n島の東にある小屋には魔法使いがいるらしいヨ\nすごい魔法を使えるらしいネ");
+                merchantFlag = -1;
+            }
+        }
+        else if (merchantFlag == 7)
+        {
+            messageManager.SetMessagePanel("戦闘が始まった");
+            merchantFlag = -1;
         }
         else
         {
@@ -268,13 +590,13 @@ public class PlayerManager : MonoBehaviour
     void meetGoblin()
     {
         charaImage.sprite = sprites[7];
-        if (goblinFlag == -1)
+        if (goblinFlag == -1)　//終わり
         {
             isDone = false;
             messageManager.SetMessagePanel("あなたはその場を立ち去った");
-            goblinFlag = 0;
+            //goblinFlag = 0;
         }
-        else if (goblinFlag == 0)
+        else if (goblinFlag == 0)　//基本
         {
             if (eventManager.button == 1)
             {
@@ -288,24 +610,23 @@ public class PlayerManager : MonoBehaviour
             }
             else if (eventManager.button == 3)
             {
-                messageManager.SetMessagePanel("ゴブリン：\nヒヒヒ・・・！\n臆病者メ！");
+                messageManager.SetMessagePanel("ゴブリン：\nククク・・・！\n臆病者メ！");
                 goblinFlag = -1;
                 karmaPoint -= 1;
             }
         }
 
-        else if (goblinFlag == 1)
+        else if (goblinFlag == 1)　//やや困惑
         {
             if (eventManager.button == 1)
             {
-                //nオマエモ魔王サマノ下デ働キタイノカ
                 messageManager.SetMessagePanel("ゴブリン：\nオレト仲良クシタイノカ？");
                 goblinFlag = 3;
                 karmaPoint -= 1;
             }
             else if (eventManager.button == 2)
             {
-                messageManager.SetMessagePanel("ゴブリン：\n魔物ガ恐ソロシクナイノカ？");
+                messageManager.SetMessagePanel("ゴブリン：\nム、魔物ガ恐ソロシクナイノカ？\n面白イ！");
                 goblinFlag = 4;
             }
             else if (eventManager.button == 3)
@@ -314,24 +635,68 @@ public class PlayerManager : MonoBehaviour
                 goblinFlag = 0;
             }
         }
-        else if (goblinFlag == 2)
+        else if (goblinFlag == 2)　//怒り
         {
             if (eventManager.button == 1)
             {
-                messageManager.SetMessagePanel("ゴブリン：\n？");
+                messageManager.SetMessagePanel("ゴブリン：\n挑発シテイルノカ？\nドウイウツモリダ？");
                 goblinFlag = 1;
                 karmaPoint -= 1;
             }
             else if (eventManager.button == 2)
             {
                 messageManager.SetMessagePanel("ゴブリン：\nカカッテコイ！人間！");
-                goblinFlag = 2;
+                goblinFlag = 5;
             }
             else if (eventManager.button == 3)
             {
                 messageManager.SetMessagePanel("ゴブリン：\n逃ガサンゾ！");
+                goblinFlag = 5;
+            }
+        }
+
+        else if (goblinFlag == 3) //好感触
+        {
+            if (eventManager.button == 1)
+            {
+                messageManager.SetMessagePanel("ゴブリン：\nイイダロウ！\n貢物ヲ寄越セ！\nソウスレバ貴様ラノ金貨ヲ代ワリニヤルゾ！");
+                goblinFlag = -1;
+                karmaPoint -= 1;
+            }
+            else if (eventManager.button == 2)
+            {
+                messageManager.SetMessagePanel("ゴブリン：\nホウ！\n骨ノアル奴ノヨウダナ！\nデハ、イイ事ヲ教エテヤル！");
+                goblinFlag = 4;
+            }
+            else if (eventManager.button == 3)
+            {
+                messageManager.SetMessagePanel("ゴブリン：\n薄気味悪イ奴ダナ\n死ニタクナケレバ失セロ！");
+                goblinFlag = 2;
+            }
+        }
+        else if (goblinFlag == 4) //情報を話す
+        {
+            if (eventManager.button == 1)
+            {
+                messageManager.SetMessagePanel("ゴブリン：\n島ノ中央ニアル塔ニテ\n魔王様ガ儀式ヲ執リ行ナオウトシテイル");
+                goblinFlag = -1;
+                karmaPoint -= 1;
+            }
+            else if (eventManager.button == 2)
+            {
+                messageManager.SetMessagePanel("ゴブリン：\nオレヲ倒シテモ無駄ダゾ！\nオーガ共ヤ、デーモン共ガノサバルダケダ！");
                 goblinFlag = -1;
             }
+            else if (eventManager.button == 3)
+            {
+                messageManager.SetMessagePanel("ゴブリン：\n悪行ヲ続ケレバ\nヤガテ人間共カラ見放サレルダロウ\nダガ、ソウスレバ魔王様モ認メテクダサルハズダ");
+                goblinFlag = -1;
+            }
+        }
+        else if (goblinFlag == 5) //戦闘
+        {
+            messageManager.SetMessagePanel("戦闘が始まった！");
+            goblinFlag = -1;
         }
         else
         {
@@ -349,7 +714,7 @@ public class PlayerManager : MonoBehaviour
             isDone = false;
             //charaImage.sprite = sprites[6];
             messageManager.SetMessagePanel("あなたは城を立ち去った");
-            kingFlag = 1;
+            //kingFlag = 0;
         }
         else if (kingFlag == 0)
         {
@@ -434,18 +799,18 @@ public class PlayerManager : MonoBehaviour
             if (eventManager.button == 1)
             {
                 messageManager.SetMessagePanel("王：\n勇者よ！この島を救ってくれい！\n其方がこの島を救った暁には\n望みの褒美を与えよう！");
-                kingFlag = 0;
+                kingFlag = 7;
                 karmaPoint += 1;
             }
             else if (eventManager.button == 2)
             {
                 messageManager.SetMessagePanel("王：\nだからどうしたじゃと？\n同じ島に生きる人間として\n力を貸して貰いたいのじゃ！\n褒美をやっても良いぞ！");
-                kingFlag = 0;
+                kingFlag = 7;
             }
             else if (eventManager.button == 3)
             {
                 messageManager.SetMessagePanel("王：\n怖気付いたか？\nだがそれでも島を救ってもらいたい！\n褒美は出すぞ！");
-                kingFlag = 0;
+                kingFlag = 7;
             }
         }
 
@@ -454,19 +819,19 @@ public class PlayerManager : MonoBehaviour
             if (eventManager.button == 1)
             {
                 messageManager.SetMessagePanel("王：\n謝ってももう遅いわ！\n２度とこの城に入ることを許さん！");
-                kingFlag = 0;
+                kingFlag = -1;
                 karmaPoint -= 1;
             }
             else if (eventManager.button == 2)
             {
                 messageManager.SetMessagePanel("王：\nぐぬぬ！言わせておけば！\n生きては帰さんぞ！\n者共であえであえ！");
-                kingFlag = 0;
+                kingFlag = 8;
                 karmaPoint -= 3;
             }
             else if (eventManager.button == 3)
             {
                 messageManager.SetMessagePanel("王：\n今更怖気ずくとはな！\n身ぐるみをはいで追放してくれるわ！");
-                kingFlag = 0;
+                kingFlag = -1;
                 karmaPoint -= 1;
             }
         }
@@ -475,12 +840,12 @@ public class PlayerManager : MonoBehaviour
             if (eventManager.button == 1)
             {
                 messageManager.SetMessagePanel("王：\n褒美は望みのままじゃ！\n話を聞くが良い！");
-                kingFlag = 4;
+                kingFlag = 1;
             }
             else if (eventManager.button == 2)
             {
                 messageManager.SetMessagePanel("王：\nわしの望みを叶えれば\n無礼な態度は許してやろう！\nだから話を聞くのじゃ！");
-                kingFlag = 4;
+                kingFlag = 1;
             }
             else if (eventManager.button == 3)
             {
@@ -488,8 +853,29 @@ public class PlayerManager : MonoBehaviour
                 kingFlag = 3;
             }
         }
-
-
+        else if (kingFlag == 7)
+        {
+            if (eventManager.button == 1)
+            {
+                messageManager.SetMessagePanel("王：\n良かろう！\n支度金を用意させた！\nこれを持って旅に出るが良い！");
+                kingFlag = -1;
+            }
+            else if (eventManager.button == 2)
+            {
+                messageManager.SetMessagePanel("王：\nあくまで褒美にこだわるか！\nならば島を救った証を立てれば\n爵位と1万ゴールドを与えよう！");
+                kingFlag = -1;
+            }
+            else if (eventManager.button == 3)
+            {
+                messageManager.SetMessagePanel("王：\nならば早々に立ち去るが良い！\n臆病者に用はない！");
+                kingFlag = -1;
+            }
+        }
+        else if (kingFlag == 8)
+        {
+            messageManager.SetMessagePanel("戦闘が始まった！");
+            kingFlag = -1;
+        }
         else
         {
             isDone = false;
@@ -497,6 +883,41 @@ public class PlayerManager : MonoBehaviour
         }
 
 
+    }
+
+    void meetTreasure()
+    {
+        //charaImage.sprite = sprites[8];
+        if (tresureFlag == -1)
+        {
+            isDone = false;
+            messageManager.SetMessagePanel("あなたはその場を立ち去った");
+            //tresureFlag = 0;
+        }
+        else if (tresureFlag == 0)
+        {
+            if (eventManager.button == 1)
+            {
+                messageManager.SetMessagePanel("あなたは宝箱を開けた！\n100ゴールド手に入れた！");
+                charaImage.sprite = sprites[9];
+                tresureFlag = -1;
+            }
+            else if (eventManager.button == 2)
+            {
+                messageManager.SetMessagePanel("おおっと！石つぶて\nあなたは10ダメージを受けた！");
+                tresureFlag = -1;
+            }
+            else if (eventManager.button == 3)
+            {
+                messageManager.SetMessagePanel("あなたは宝箱を開けなかった・・・");
+                tresureFlag = -1;
+            }
+        }
+        else
+        {
+            isDone = false;
+            tresureFlag = -1;
+        }
     }
 
     public void EventBranch()
@@ -509,9 +930,37 @@ public class PlayerManager : MonoBehaviour
         {
             meetGoblin();
         }
+        else if (onEvent == 3)
+        {
+            meetTreasure();
+        }
+        else if (onEvent == 4)
+        {
+            meetOgre();
+        }
         else if (onEvent == 5)
         {
             meetKing();
+        }
+        else if (onEvent == 6)
+        {
+            meetElf();
+        }
+        else if (onEvent == 7)
+        {
+            meetDwarf();
+        }
+        else if (onEvent == 8)
+        {
+            meetDarkLord();
+        }
+        else if (onEvent == 9)
+        {
+            meetWitch();
+        }
+        else if (onEvent == 10)
+        {
+            meetDragon();
         }
         EventManager.isClick = false;
     }

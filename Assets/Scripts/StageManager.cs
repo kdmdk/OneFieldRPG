@@ -222,6 +222,14 @@ public class StageManager : MonoBehaviour
         }
         return false;
     }
+    public bool IsHouse(Vector2Int position)
+    {
+        if (tileTable[position.x, position.y] == TILE_TYPE.HOUSE)
+        {
+            return true;
+        }
+        return false;
+    }
     public bool IsTower(Vector2Int position)
     {
         if (tileTable[position.x, position.y] == TILE_TYPE.TOWER)

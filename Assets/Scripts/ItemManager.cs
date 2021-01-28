@@ -30,6 +30,8 @@ public class ItemManager : MonoBehaviour
 	//　名前でアイテムを取得
 	public Item GetItem(string searchName)
 	{
-		return itemDataBase.GetItemLists().Find(itemName => itemName.GetItemName() == searchName);
+		// スクリプタブルオブジェクトを探してくる
+		Item origin = itemDataBase.GetItemLists().Find(itemName => itemName.GetItemName() == searchName);
+		return new Item(origin);
 	}
 }
